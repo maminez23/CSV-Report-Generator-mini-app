@@ -1,7 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
-const http = require('http')
+const http = require('http');
+const handleReq = require('./helpers')
 
 var app = express();
 
@@ -17,13 +18,13 @@ app.use(function(req, res, next) {
 });
 
 app.post('/', function(req,res){
-console.log(req.body);
-    res.status(200)
+console.log(JSON.parse(JSON.stringify(req.body)));
+    handleReq(JSON.parse(JSON.stringify(req.body)));
+    res.status(200);
     res.send('hello')
 });
 
 app.get('/', function (req, res){
-
 
 });
 
