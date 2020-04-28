@@ -2,7 +2,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const http = require('http');
-const handleReq = require('./helpers')
+const helpers = require('./helpers');
+const fs = require('fs');
+
 
 var app = express();
 
@@ -16,16 +18,25 @@ app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
-
+var set = false;
 app.post('/', function(req,res){
-console.log(JSON.parse(JSON.stringify(req.body)));
-    handleReq(JSON.parse(JSON.stringify(req.body)));
-    res.status(200);
-    res.send('hello')
-});
 
-app.get('/', function (req, res){
+    if(!set){
+        set = true
+        helpers.setHeaders(JSON.parse(JSON.stringify(req.body)));
 
+    }
+    helpers.setBody(JSON.parse(JSON.stringify(req.body)))
+    fs.readFile('csv-data', (err, txt) => {
+        if(err){
+            throw new Error('there was an error while reading data')
+        }
+        else{
+            res.status(200);
+            res.send(txt);
+
+        }
+    })
 });
 
 var port = process.env.PORT || 3000;

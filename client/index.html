@@ -7,8 +7,9 @@
 </head>
 <body>
 <h1> Welcome to the CSV Report Generator</h1>
-<textarea placeholder="enter your JSON data" style="display: block"></textarea><br>
-<button onclick="send()"> Submit </button>
+<textarea placeholder="enter your JSON data"></textarea><br>
+<button onclick="send()" style="display: block"> Submit </button>
+<p id="data"></p>
 
 <script>
 
@@ -26,11 +27,11 @@
 
         var xhr = new XMLHttpRequest();
         params = $('textarea').val()
-        xhr.open('POST', "http://localhost:3000/", true);
+        xhr.open('POST', "http://localhost:3000/");
         xhr.setRequestHeader('Content-type', 'application/json');
         xhr.onload  = function() {
-            var CSVResponse = xhr.response;
-            console.log(CSVResponse)
+            console.log(xhr.response);
+            $('#data').text(xhr.response);
         };
         xhr.send(params);
     }
